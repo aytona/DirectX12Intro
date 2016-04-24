@@ -3,14 +3,15 @@
 #include <DirectXPackedVector.h>
 #include <iostream>
 
-std::ostream& XM_CALLCONV operator<<(std::ostream& os, DirectX::FXMVECTOR v)
-{
-	DirectX::XMFLOAT3 dest;
-	DirectX::XMStoreFloat3(&dest, v);
+//using namespace std;
+//using namespace DirectX;
+//using namespace DirectX::PackedVector;
 
-	os << "(" << dest.x << ", " << dest.y << ", " << dest.z << ")";
-	return os;
-}
+std::ostream& XM_CALLCONV operator<<(std::ostream& os, DirectX::FXMVECTOR v);
+#pragma region Vector Algebra
+void VectorSetter();
+void VectorFunctions();
+#pragma endregion
 
 int main()
 {
@@ -22,6 +23,20 @@ int main()
 		return 0;
 	}
 
+	return 0;
+}
+
+std::ostream& XM_CALLCONV operator<<(std::ostream& os, DirectX::FXMVECTOR v)
+{
+	DirectX::XMFLOAT3 dest;
+	DirectX::XMStoreFloat3(&dest, v);
+
+	os << "(" << dest.x << ", " << dest.y << ", " << dest.z << ")";
+	return os;
+}
+
+void VectorSetter()
+{
 	DirectX::XMVECTOR p = DirectX::XMVectorZero();
 	DirectX::XMVECTOR q = DirectX::XMVectorSplatOne();
 	DirectX::XMVECTOR u = DirectX::XMVectorSet(1.0f, 2.0f, 3.0f, 0.0f);
@@ -33,6 +48,16 @@ int main()
 	std::cout << "u = " << u << std::endl;
 	std::cout << "v = " << v << std::endl;
 	std::cout << "w = " << w << std::endl;
+}
 
-	return 0;
+void VectorFunctions()
+{
+	DirectX::XMVECTOR n = DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+	DirectX::XMVECTOR u = DirectX::XMVectorSet(1.0f, 2.0f, 3.0f, 0.0f);
+	DirectX::XMVECTOR v = DirectX::XMVectorSet(-2.0f, 1.0f, -3.0f, 0.0f);
+	DirectX::XMVECTOR w = DirectX::XMVectorSet(0.707f, 0.707f, 0.0f, 0.0f);
+
+	DirectX::XMVECTOR a = DirectX::XMVectorAdd(u, v);
+	
+
 }
