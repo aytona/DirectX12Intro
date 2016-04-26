@@ -3,15 +3,15 @@
 #include <DirectXPackedVector.h>
 #include <iostream>
 
-//using namespace std;
-//using namespace DirectX;
-//using namespace DirectX::PackedVector;
-
 std::ostream& XM_CALLCONV operator<<(std::ostream& os, DirectX::FXMVECTOR v);
+std::ostream& XM_CALLCONV operator<<(std::ostream& os, DirectX::FXMMATRIX m);
 int SENTINEL = -99;
 #pragma region Vector Algebra
 void VectorSetter();
 void VectorFunctions();
+#pragma endregion
+#pragma region Matrix Algebra
+void MatrixSample();
 #pragma endregion
 
 int main()
@@ -36,6 +36,9 @@ int main()
 		case 2:
 			VectorFunctions();
 			break;
+		case 3:
+			MatrixSample();
+			break;
 		default:
 			std::cout << "Invalid input!\nType -99 to end\n";
 			break;
@@ -51,6 +54,19 @@ std::ostream& XM_CALLCONV operator<<(std::ostream& os, DirectX::FXMVECTOR v)
 	DirectX::XMStoreFloat3(&dest, v);
 
 	os << "(" << dest.x << ", " << dest.y << ", " << dest.z << ")";
+	return os;
+}
+
+std::ostream& XM_CALLCONV operator<<(std::ostream&os, DirectX::FXMMATRIX m)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		os << DirectX::XMVectorGetX(m.r[i]) << "\t";
+		os << DirectX::XMVectorGetY(m.r[i]) << "\t";
+		os << DirectX::XMVectorGetZ(m.r[i]) << "\t";
+		os << DirectX::XMVectorGetW(m.r[i]) << "\t";
+		os << std::endl;
+	}
 	return os;
 }
 
@@ -110,4 +126,26 @@ void VectorFunctions()
 	std::cout << "projW + perpW == w = " << equal << std::endl;
 	std::cout << "projW + perpW != w = " << notEqual << std::endl;
 	std::cout << "angle \t = " << angleDegrees << std::endl;
+}
+
+void MatrixSample()
+{
+	DirectX::XMMATRIX A(1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 2.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 4.0f, 0.0f,
+		1.0f, 2.0f, 3.0f, 1.0f);
+	DirectX::XMMATRIX B = DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX C = A * B;
+	DirectX::XMMATRIX D = DirectX::XMMatrixTranspose(A);
+	DirectX::XMVECTOR det = DirectX::XMMatrixDeterminant(A);
+	DirectX::XMMATRIX E = DirectX::XMMatrixInverse(&det, A);
+	DirectX::XMMATRIX F = A * E;
+
+	std::cout << "A = " << std::endl << A << std::endl;
+	std::cout << "B = " << std::endl << B << std::endl;
+	std::cout << "C = A * B" << std::endl << C << std::endl;
+	std::cout << "D = transpose (A)" << std::endl << D << std::endl;
+	std::cout << "det = determinant (A)" << std::endl << det << std::endl << std::endl;
+	std::cout << "E = inverse (A)" << std::endl << E << std::endl;
+	std::cout << "F = A * E" << std::endl << F << std::endl;
 }
